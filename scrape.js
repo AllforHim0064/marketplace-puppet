@@ -64,6 +64,7 @@ async function getItems(){
     let bodyHTML = await page.evaluate(() => document.body.outerHTML);
     let searchResult = JSON.parse(bodyHTML.split(/(?:"marketplace_search":|,"marketplace_seo_page")+/)[2]);
     let items = searchResult["feed_units"]["edges"]
+    await page.waitForTimeout(5000)
     if (items.length > 1){
 		try {
       items.forEach((val, index)=>{
