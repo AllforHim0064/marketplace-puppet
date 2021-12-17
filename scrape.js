@@ -54,13 +54,15 @@ async function getItems(){
   fs.readFile('./pastItems.json', 'utf-8', function(err, data) {
   arrayOfItems = JSON.parse(data);
   })
-  const browser = await puppeteer.launch({headless: false})
+  const browser = await puppeteer.launch({headless: true})
   const page = await browser.newPage()
   for (var i=0;i<searchTerms.length;i++){
     var newItems = [];
     var searchTerm = searchTerms[i].replace(/ /g,'%20');    
     console.log(`\nResults for ${searchTerms[i]}:\n`)
+	  await page.waitForTimeout(5000)
     await page.goto(`https://www.facebook.com/marketplace/${locationRef}/search/?daysSinceListed=1&sortBy=best_match&query=${searchTerm}&exact=false`)
+	  await page.waitForTimeout(5000)
     let bodyHTML = await page.evaluate(() => document.body.outerHTML);
     let searchResult = JSON.parse(bodyHTML.split(/(?:"marketplace_search":|,"marketplace_seo_page")+/)[2]);
     let items = searchResult["feed_units"]["edges"]
@@ -96,10 +98,9 @@ async function getItems(){
     console.log('Updated past items')
   })
 }
-getItems()
 // TO CHANGE CRON TIME SCHEDULE
 // https://www.npmjs.com/package/node-cron
 cron.schedule('*/10 * * * *', function() {
   getItems()
 });
-//getItems()
+
