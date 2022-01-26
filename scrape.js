@@ -8,23 +8,27 @@ var fs = require('fs')
 
 var arrayOfItems;
 
-// UPDATE WITH YOUR LOCATION REFERENCE FROM STEP 4
-let locationRef = 'change'
+// must have usSearch.txt in folder you can add citys to the file if you want
+var cities = fs.readFileSync("./usSearch.txt", 'utf-8');
+var cityList = cities.split(' ');
+//var locationRef = 'denver'
+console.log(cityList);
+var cityIndex = 0;
 
 // UPDATE WITH ITEMS YOU WANT TO SEARCH FOR
-let searchTerms = ['change', 'change']
+let searchTerms = ['Replace', 'Replace']
 
 const nodemailer = require('nodemailer');
 
 // UPDATE WITH EMAIL YOU WANT TO RECEIVE AT
-let emailRecipient = "change@gmail.com"
+let emailRecipient = "example@gmail.com"
 
-// UPDATE WITH YOUR SENDING EMAIL ACCOUNT
+// UPDATE WITH YOUR SENDING EMAIL ACCOUNTwww
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'change@gmail.com',
-      pass: 'change' 
+      user: 'example@gmail.com',
+      pass: 'example' 
     }
   });
 
@@ -62,8 +66,11 @@ async function getItems(){
     var searchTerm = searchTerms[i].replace(/ /g,'%20');    
     console.log(`\nResults for ${searchTerms[i]}:\n`)
 	await page.waitForTimeout(5000)
-    await page.goto(`https://www.facebook.com/marketplace/${locationRef}/search/?daysSinceListed=1&sortBy=best_match&query=${searchTerm}&exact=false`)
+    await page.goto(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search?query=${searchTerm}&radius=805&deliveryMethod=local_pick_up`)
+	//console.log(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search/?daysSinceListed=1&sortBy=best_match&query=${searchTerm}&exact=false`)
+	console.log(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search?query=${searchTerm}&radius=805&deliveryMethod=local_pick_up`)
 	//console.log(`\n1\n`)
+	console.log(cityIndex)
 	await page.waitForTimeout(5000)
     let bodyHTML = await page.evaluate(() => document.body.outerHTML);
 	//console.log(`\n2\n`)
@@ -99,6 +106,12 @@ async function getItems(){
 		console.log('No new items for ' + searchTerms[i]);
 	}
   };
+  //console.log(link)
+  if(cityIndex < cityList.length - 1){
+	  cityIndex++;
+  }else{
+	  cityIndex = 0;
+  }
   await browser.close()
   //console.log(`\n5\n`)
   fs.writeFile('./pastItems.json', JSON.stringify(arrayOfItems), 'utf-8', function(err) {
