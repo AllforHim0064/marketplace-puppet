@@ -66,9 +66,9 @@ async function getItems(){
     var searchTerm = searchTerms[i].replace(/ /g,'%20');    
     console.log(`\nResults for ${searchTerms[i]}:\n`)
 	await page.waitForTimeout(5000)
-    await page.goto(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search?query=${searchTerm}&radius=805&deliveryMethod=local_pick_up`)
-	//console.log(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search/?daysSinceListed=1&sortBy=best_match&query=${searchTerm}&exact=false`)
-	console.log(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search?query=${searchTerm}&radius=805&deliveryMethod=local_pick_up`)
+    await page.goto(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search/?daysSinceListed=1&sortBy=best_match&query=${searchTerm}&exact=false`)
+	console.log(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search/?daysSinceListed=1&sortBy=best_match&query=${searchTerm}&exact=false`)
+	//console.log(`https://www.facebook.com/marketplace/${cityList[cityIndex]}/search?query=${searchTerm}&radius=805&deliveryMethod=local_pick_up`)
 	//console.log(`\n1\n`)
 	console.log(cityIndex)
 	await page.waitForTimeout(5000)
